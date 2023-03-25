@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useRecoilValue } from "recoil";
+import "./App.css";
+import { IntervalSelector } from "./IntervalSelector";
+import { AudioElements } from "./sound";
+import { acoustic_grand_piano } from "./acoustic_grand_piano";
+import { statsSelector } from "./state";
+import { useQuestion } from "./useQuestion";
 
 function App() {
+  const { playQuestionSound, correctAnswer, nextQuestion, guess } =
+    useQuestion();
+
+  const stats = useRecoilValue(statsSelector);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button
+        onClick={() => {
+          playQuestionSound();
+        }}
+      >
+        play again
+      </button>
+      <button onClick={nextQuestion}>next question</button>
+      <IntervalSelector
+        onSelect={(arg) => {
+          guess(arg);
+          console.log(arg);
+        }}
+      />
+      correctAnswer: {correctAnswer}
+      <br></br>
+      <br></br>
+      {JSON.stringify(stats, null, 2)}
+      <AudioElements notesObj={acoustic_grand_piano} />
     </div>
   );
 }
