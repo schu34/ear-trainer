@@ -8,7 +8,7 @@ import { statsSelector } from "./state";
 import { useQuestion } from "./useQuestion";
 
 function App() {
-  const { playQuestionSound, correctAnswer, nextQuestion, guess } =
+  const { playQuestionSound, correctAnswer, nextQuestion, guess, attempts } =
     useQuestion();
 
   const stats = useRecoilValue(statsSelector);
@@ -29,13 +29,25 @@ function App() {
           console.log(arg);
         }}
       />
-      correctAnswer: {correctAnswer}
-      <br></br>
-      <br></br>
+      <br />
+      <br />
+      <Attempts attempts={attempts} correctAnswer={correctAnswer} />
+      <br />
+      <br />
       {JSON.stringify(stats, null, 2)}
       <AudioElements notesObj={acoustic_grand_piano} />
     </div>
   );
 }
+
+const Attempts = ({
+  attempts,
+  correctAnswer,
+}: {
+  attempts: number;
+  correctAnswer: string;
+}) => {
+  return <>{attempts > 0 && "correctAnswer: " + correctAnswer}</>;
+};
 
 export default App;

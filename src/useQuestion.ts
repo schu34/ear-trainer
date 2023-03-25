@@ -19,12 +19,14 @@ export const useQuestion = () => {
   const setQuestionHistory = useSetRecoilState(questionHistoryState);
 
   const settings = useRecoilValue(settingsState);
+  const [attempts, setAttempts] = React.useState(0);
 
   const playQuestionSound = React.useCallback(() => {
     playNotesSeq(currentQuestion.notes, settings.delay);
   }, [currentQuestion]);
 
   const getNextQuestion = React.useCallback(() => {
+    setAttempts(0);
     setCurrentQuestion(
       createIntervalQuestion(settings, currentQuestion.index + 1)
     );
@@ -32,7 +34,6 @@ export const useQuestion = () => {
 
   const guess = React.useCallback(
     (interval: Interval) => {
-      //guess logic
       if (interval.shortName === currentQuestion.answer.shortName) {
         setQuestionHistory((prev: QuestionHistory[]) => {
           return produce(prev, (draft) => {
@@ -44,6 +45,7 @@ export const useQuestion = () => {
         });
         getNextQuestion();
       } else {
+        setAttempts(attempts + 1);
         setQuestionHistory((prev: QuestionHistory[]) => {
           return produce(prev, (draft) => {
             draft[currentQuestion.index] = {
@@ -54,7 +56,7 @@ export const useQuestion = () => {
         });
       }
     },
-    [currentQuestion, getNextQuestion, setQuestionHistory]
+    [currentQuestion, getNextQuestion, setQuestionHistory, attempts]
   );
 
   React.useEffect(() => {
@@ -66,5 +68,6 @@ export const useQuestion = () => {
     correctAnswer: currentQuestion.answer.shortName,
     nextQuestion: getNextQuestion,
     guess,
+    attempts,
   };
 };
