@@ -1,4 +1,4 @@
-import { assert, getRandomIntegerInRange } from "./util";
+import { assert, getRandomArrayElement, getRandomIntegerInRange } from "./util";
 
 describe("assert", () => {
   it("should do nothing if condidion is true", () => {
@@ -33,5 +33,17 @@ describe("getRandomIntegerInRange", () => {
     }
     expect(oneSeen).toBeTruthy();
     expect(tenSeen).toBeFalsy();
+  });
+});
+
+
+describe("getRandomArrayElement", () => {
+  it("should pick a random element from the array", () => {
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    for (var i = 0; i < 1000; i++) {
+      const int = getRandomArrayElement(arr);
+      expect(int).toBeDefined();
+      expect(arr).toContain(int);
+    }
   });
 });
