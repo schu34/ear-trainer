@@ -4,7 +4,7 @@ import "./App.css";
 import { IntervalSelector } from "./IntervalSelector";
 import { AudioElements } from "./sound";
 import { acoustic_grand_piano } from "./acoustic_grand_piano";
-import { statsSelector } from "./state";
+import { statsSelector, Stats } from "./state";
 import { useQuestion } from "./useQuestion";
 
 function App() {
@@ -45,11 +45,10 @@ function App() {
           <IntervalSelector
             onSelect={(arg) => {
               guess(arg);
-              console.log(arg);
             }}
           />
         </div>
-        {JSON.stringify(stats, null, 2)}
+        <StatsComponent stats={stats} />
       </div>
       <div className="column">
         <Answer attempts={attempts} correctAnswer={correctAnswer} />
@@ -67,6 +66,16 @@ const Answer = ({
   correctAnswer: string;
 }) => {
   return <>{attempts > 0 && "correctAnswer: " + correctAnswer}</>;
+};
+
+const StatsComponent = ({ stats: { correct, total } }: { stats: Stats }) => {
+  const percentCorrect = Math.round((correct / total) * 100);
+
+  return total > 0 ? (
+    <>
+      {correct}/{total}, {percentCorrect}% correct
+    </>
+  ) : null;
 };
 
 export default App;

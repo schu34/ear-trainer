@@ -66,7 +66,6 @@ export function createIntervalQuestion(
   index = 0
 ): Question {
   const direction = getDirection(settings);
-  console.log("direction", direction);
   const interval = getRandomInterval(settings.intervalsSelection);
   const notes = getNotesForInterval({
     halfSteps: interval.halfSteps,
@@ -81,7 +80,14 @@ export function createIntervalQuestion(
   };
 }
 
-export const statsSelector = selector({
+export interface Stats {
+  total: number;
+  correct: number;
+  incorrect: number;
+  percentCorrect: number;
+}
+
+export const statsSelector = selector<Stats>({
   key: "stats",
   get: ({ get }) => {
     const history = get(questionHistoryState);
