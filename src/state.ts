@@ -50,12 +50,28 @@ export const currentQuestionState = atom<Question>({
   default: createIntervalQuestion(defaultSettings),
 });
 
+function getDirection(settings: Settings) {
+  if (settings.ascending && settings.descending) {
+    return Math.random() > 0.5 ? "ascending" : "descending";
+  } else if (settings.ascending) {
+    return "ascending";
+  } else if (settings.descending) {
+    return "descending";
+  }
+  throw new Error("No direction selected");
+}
+
 export function createIntervalQuestion(
   settings: Settings,
   index = 0
 ): Question {
+  const direction = getDirection(settings);
+  console.log("direction", direction);
   const interval = getRandomInterval(settings.intervalsSelection);
-  const notes = getNotesForInterval({ halfSteps: interval.halfSteps });
+  const notes = getNotesForInterval({
+    halfSteps: interval.halfSteps,
+    ascending: direction === "ascending",
+  });
 
   return {
     mode: "interval",

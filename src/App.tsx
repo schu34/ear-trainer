@@ -15,20 +15,31 @@ function App() {
 
   return (
     <div className="container ">
-      <button
-        className="button"
-        onClick={() => {
-          playQuestionSound();
-        }}
-      >
-        play again
-      </button>
-      <button className="button" onClick={nextQuestion}>
-        next question
-      </button>
+      <div className="title">Interval Trainer</div>
       <br />
       <br />
       <br />
+      <div className="columns">
+        <div className="column is-one-third">
+          <div className="columns">
+            <div className="column">
+              <button
+                className="button is-primary"
+                onClick={() => {
+                  playQuestionSound();
+                }}
+              >
+                play again
+              </button>
+            </div>
+            <div className="column is-warning">
+              <button className="button" onClick={nextQuestion}>
+                next question
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="columns">
         <div className="column is-one-third">
           <IntervalSelector
@@ -41,14 +52,14 @@ function App() {
         {JSON.stringify(stats, null, 2)}
       </div>
       <div className="column">
-        <Attempts attempts={attempts} correctAnswer={correctAnswer} />
+        <Answer attempts={attempts} correctAnswer={correctAnswer} />
       </div>
       <AudioElements notesObj={acoustic_grand_piano} />
     </div>
   );
 }
 
-const Attempts = ({
+const Answer = ({
   attempts,
   correctAnswer,
 }: {

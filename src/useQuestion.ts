@@ -23,14 +23,14 @@ export const useQuestion = () => {
 
   const playQuestionSound = React.useCallback(() => {
     playNotesSeq(currentQuestion.notes, settings.delay);
-  }, [currentQuestion]);
+  }, [currentQuestion.notes, settings.delay]);
 
   const getNextQuestion = React.useCallback(() => {
     setAttempts(0);
     setCurrentQuestion(
       createIntervalQuestion(settings, currentQuestion.index + 1)
     );
-		stopAllSounds();
+    stopAllSounds();
   }, [currentQuestion, setCurrentQuestion, settings]);
 
   const guess = React.useCallback(
@@ -62,7 +62,7 @@ export const useQuestion = () => {
 
   React.useEffect(() => {
     playQuestionSound();
-  }, [currentQuestion]);
+  }, [currentQuestion, playQuestionSound]);
 
   return {
     playQuestionSound,

@@ -12,16 +12,21 @@ export const IntervalSelector: React.FC<IntervalSelectorProps> = ({
 }) => {
   return (
     <>
-      <div className="columns is-multiline is-mobile">
-        {options.map((interval) => {
-          return (
-            <div className="column is-half">
-              <button onClick={() => onSelect(interval)} className="button">
-                {interval.longName}
-              </button>
-            </div>
-          );
-        })}
+      <div className="box">
+        <div className="columns is-multiline is-mobile">
+          {options.map((interval) => {
+            return (
+              <div className="column is-one-quarter ">
+                <button
+                  onClick={() => onSelect(interval)}
+                  className="button is-info interval-button"
+                >
+                  {interval.shortName}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );
