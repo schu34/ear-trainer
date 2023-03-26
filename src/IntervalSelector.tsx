@@ -22,34 +22,41 @@ export const IntervalSelector: React.FC<IntervalSelectorProps> = ({
 }) => {
   return (
     <>
-      {/* {options.map((interval) => {
-        return (
-          <button onClick={() => onSelect(interval)}>
-            {interval.longName}
-          </button>
-        );
-      })} */}
-      <div className="interval-button-container">
-        {layout.map((col) => {
+      <div className="columns is-multiline is-mobile">
+        {options.map((interval) => {
           return (
-            <div className="interval-button-column">
-              {col.map((intervalName) => {
-                const interval = options.find(
-                  (interval) => interval.shortName === intervalName
-                );
-                if (!interval) {
-                  return null;
-                }
-                return (
-                  <button onClick={() => onSelect(interval)} className="interval-button">
-                    {interval.longName}
-                  </button>
-                );
-              })}
+            <div className="column is-half">
+              <button onClick={() => onSelect(interval)} className="button">
+                {interval.longName}
+              </button>
             </div>
           );
         })}
       </div>
+      {/* {layout.map((row) => {
+        return (
+          <div className="columns is-centered is-1 is-variable">
+            {row.map((intervalName) => {
+              const interval = options.find(
+                (interval) => interval.shortName === intervalName
+              );
+              if (!interval) {
+                return null;
+              }
+              return (
+                <div className="column">
+                  <button
+                    onClick={() => onSelect(interval)}
+                    className="button interval-button "
+                  >
+                    {interval.longName}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })} */}
     </>
   );
 };

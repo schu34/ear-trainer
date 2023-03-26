@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import "./App.css";
-import { playNotesSeq } from "./sound";
+import { playNotesSeq, stopAllSounds } from "./sound";
 import {
   createIntervalQuestion,
   currentQuestionState,
@@ -30,6 +30,7 @@ export const useQuestion = () => {
     setCurrentQuestion(
       createIntervalQuestion(settings, currentQuestion.index + 1)
     );
+		stopAllSounds();
   }, [currentQuestion, setCurrentQuestion, settings]);
 
   const guess = React.useCallback(
@@ -65,7 +66,7 @@ export const useQuestion = () => {
 
   return {
     playQuestionSound,
-    correctAnswer: currentQuestion.answer.shortName,
+    correctAnswer: currentQuestion.answer.longName,
     nextQuestion: getNextQuestion,
     guess,
     attempts,

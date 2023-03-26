@@ -93,7 +93,7 @@ export function playNotesSeq(notes: Note[], delay: number) {
   });
 }
 
-function stopAllSounds() {
+export function stopAllSounds() {
   document.querySelectorAll(".audio-el").forEach((elem) => {
     if (elem instanceof HTMLAudioElement) {
       elem.pause();

@@ -14,27 +14,35 @@ function App() {
   const stats = useRecoilValue(statsSelector);
 
   return (
-    <div className="App">
+    <div className="container ">
       <button
+        className="button"
         onClick={() => {
           playQuestionSound();
         }}
       >
         play again
       </button>
-      <button onClick={nextQuestion}>next question</button>
-      <IntervalSelector
-        onSelect={(arg) => {
-          guess(arg);
-          console.log(arg);
-        }}
-      />
+      <button className="button" onClick={nextQuestion}>
+        next question
+      </button>
       <br />
       <br />
-      <Attempts attempts={attempts} correctAnswer={correctAnswer} />
       <br />
-      <br />
-      {JSON.stringify(stats, null, 2)}
+      <div className="columns">
+        <div className="column is-one-third">
+          <IntervalSelector
+            onSelect={(arg) => {
+              guess(arg);
+              console.log(arg);
+            }}
+          />
+        </div>
+        {JSON.stringify(stats, null, 2)}
+      </div>
+      <div className="column">
+        <Attempts attempts={attempts} correctAnswer={correctAnswer} />
+      </div>
       <AudioElements notesObj={acoustic_grand_piano} />
     </div>
   );
