@@ -31,7 +31,9 @@ export type SequenceStep = {
 };
 
 export type Sequence = SequenceStep[];
+const ctx = new AudioContext();
 
+const activeSourceNodes: AudioBufferSourceNode[] = [];
 
 export function playNote(note: Note) {
   console.log("playing", note);
@@ -66,24 +68,33 @@ export function makeChord(notes: Chord, delay: number): SequenceStep {
   return { notes, delay };
 }
 
+function stopAllBuffers() {
+  activeSourceNodes.forEach((node) => {
+    try {
+      node.stop();
+    } catch (e) {}
+  });
+}
+
 async function playWithDelay(notes: Note[], delay: number) {
-  console.log("playing", notes, "with delay", delay, "ms")
-  const ctx = new AudioContext();
-  notes.forEach((note) => {
+  console.log("playing", notes, "with delay", delay, "ms");
+  stopAllBuffers();
+
+  notes.forEach((note, idx) => {
     if (!acoustic_grand_piano[note]) {
       throw new Error("note out of bounds");
     }
     const b = ctx.createBufferSource();
-    b.connect(ctx.destination)
+    activeSourceNodes.push(b);
+    b.connect(ctx.destination);
     ctx
       .decodeAudioData(createBufferFromBase64(acoustic_grand_piano[note]))
       .then((buffer) => {
         b.buffer = buffer;
-        b.start(delay/1000);
+        b.start(ctx.currentTime + (delay * idx) / 1000);
       });
   });
 }
-
 
 function createBufferFromBase64(base64?: string) {
   if (!base64) {
@@ -97,7 +108,6 @@ function createBufferFromBase64(base64?: string) {
     view[i] = binary.charCodeAt(i);
   }
   return buffer;
-
 }
 
 export function playSequence(seq: Sequence) {
@@ -109,12 +119,7 @@ export function playSequence(seq: Sequence) {
 
 export function playNotesSeq(notes: Note[], delay: number) {
   console.log("playing notes", notes, "with delay", delay);
-  notes.forEach((note, i) => {
-    playWithDelay([note], delay * i);
-    // setTimeout(() => {
-    //   playNote(note);
-    // }, delay * i);
-  });
+  playWithDelay(notes, delay);
 }
 
 export function stopAllSounds() {
