@@ -1,3 +1,5 @@
+import { acoustic_grand_piano } from "./acoustic_grand_piano";
+
 type NoteName =
   | "Ab"
   | "A"
@@ -30,6 +32,7 @@ export type SequenceStep = {
 
 export type Sequence = SequenceStep[];
 
+
 export function playNote(note: Note) {
   console.log("playing", note);
   const elem = document.querySelector("#" + note);
@@ -42,10 +45,6 @@ export function playNote(note: Note) {
   }
 }
 
-// export function chord(notes: Note[]): SequenceStep {
-//   return n
-// }
-
 export function makeSeq(
   steps: (Note | Chord)[],
   delay: number
@@ -56,40 +55,65 @@ export function makeSeq(
   }));
 }
 
-export function makeInterval(notes: [Note,Note], delay: number):[SequenceStep,SequenceStep] {
-  return makeSeq(notes, delay) as [SequenceStep,SequenceStep];
+export function makeInterval(
+  notes: [Note, Note],
+  delay: number
+): [SequenceStep, SequenceStep] {
+  return makeSeq(notes, delay) as [SequenceStep, SequenceStep];
 }
 
 export function makeChord(notes: Chord, delay: number): SequenceStep {
   return { notes, delay };
 }
 
+async function playWithDelay(notes: Note[], delay: number) {
+  console.log("playing", notes, "with delay", delay, "ms")
+  const ctx = new AudioContext();
+  notes.forEach((note) => {
+    if (!acoustic_grand_piano[note]) {
+      throw new Error("note out of bounds");
+    }
+    const b = ctx.createBufferSource();
+    b.connect(ctx.destination)
+    ctx
+      .decodeAudioData(createBufferFromBase64(acoustic_grand_piano[note]))
+      .then((buffer) => {
+        b.buffer = buffer;
+        b.start(delay/1000);
+      });
+  });
+}
 
-function playWithDelay(notes: Note[], delay: number) {
-  return setTimeout(() => {
-    stopAllSounds();
-    return notes.forEach(playNote);
-  }, delay);
+
+function createBufferFromBase64(base64?: string) {
+  if (!base64) {
+    return new ArrayBuffer(0);
+  }
+  const binary = atob(base64.split("data:audio/mp3;base64,")[1]);
+  const len = binary.length;
+  const buffer = new ArrayBuffer(len);
+  const view = new Uint8Array(buffer);
+  for (let i = 0; i < len; i++) {
+    view[i] = binary.charCodeAt(i);
+  }
+  return buffer;
+
 }
 
 export function playSequence(seq: Sequence) {
-  // we have to coerce this because as far as TS is concerned this is still just
-  // a Sequence, but we're assuming 10 levels of flattening is sufficient to
-  // remove any nested arrays
-  const intervals = seq // 10 should be plenty, but we can always raise this if needed
-    .map(({ notes, delay }) => {
-      const noteArr = Array.isArray(notes) ? notes : [notes];
-      return playWithDelay(noteArr, delay);
-    });
-  return () => intervals.forEach(clearInterval);
+  seq.forEach(({ notes, delay }) => {
+    const noteArr = Array.isArray(notes) ? notes : [notes];
+    playWithDelay(noteArr, delay);
+  });
 }
 
 export function playNotesSeq(notes: Note[], delay: number) {
   console.log("playing notes", notes, "with delay", delay);
   notes.forEach((note, i) => {
-    setTimeout(() => {
-      playNote(note);
-    }, delay * i);
+    playWithDelay([note], delay * i);
+    // setTimeout(() => {
+    //   playNote(note);
+    // }, delay * i);
   });
 }
 
