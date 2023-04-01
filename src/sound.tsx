@@ -36,7 +36,6 @@ const ctx = new AudioContext();
 const activeSourceNodes: AudioBufferSourceNode[] = [];
 
 export function playNote(note: Note) {
-  console.log("playing", note);
   const elem = document.querySelector("#" + note);
   if (elem instanceof HTMLAudioElement) {
     if (elem.paused) {
@@ -72,12 +71,13 @@ function stopAllBuffers() {
   activeSourceNodes.forEach((node) => {
     try {
       node.stop();
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   });
 }
 
 async function playWithDelay(notes: Note[], delay: number) {
-  console.log("playing", notes, "with delay", delay, "ms");
   stopAllBuffers();
 
   notes.forEach((note, idx) => {
