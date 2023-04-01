@@ -79,6 +79,7 @@ function stopAllBuffers() {
 
 async function playWithDelay(notes: Note[], delay: number) {
   stopAllBuffers();
+  ctx.resume();
 
   notes.forEach((note, idx) => {
     if (!acoustic_grand_piano[note]) {
