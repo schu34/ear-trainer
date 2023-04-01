@@ -13,13 +13,13 @@ export const IntervalSelector: React.FC<IntervalSelectorProps> = ({
   return (
     <>
       <div className="box">
-        <div className="columns is-multiline is-mobile">
+        <div className="columns is-multiline is-mobile is-variable is-1">
           {options.map((interval) => {
             return (
-              <div className="column is-one-quarter ">
+              <div className="column is-one-quarter buttons are-large">
                 <button
                   onClick={() => onSelect(interval)}
-                  className="button is-info interval-button"
+                  className="button is-info interval-button is-fullwidth"
                 >
                   {interval.shortName}
                 </button>

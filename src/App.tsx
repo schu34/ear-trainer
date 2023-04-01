@@ -21,7 +21,7 @@ function App() {
       <br />
       <div className="columns">
         <div className="column is-one-third">
-          <div className="columns">
+          <div className="columns is-mobile">
             <div className="column">
               <button
                 className="button is-primary"

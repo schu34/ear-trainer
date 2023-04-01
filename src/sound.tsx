@@ -79,6 +79,8 @@ function stopAllBuffers() {
 
 async function playWithDelay(notes: Note[], delay: number) {
   stopAllBuffers();
+  //sometimes the context is can enter the interrupted state, so we need to
+  //resume it here. Particularly a problem in Safari.
   ctx.resume();
 
   notes.forEach((note, idx) => {
