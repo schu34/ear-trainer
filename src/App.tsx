@@ -22,19 +22,19 @@ function App() {
       <div className="columns">
         <div className="column is-one-third">
           <div className="columns is-mobile">
-            <div className="column">
+            <div className="column is-fluid">
               <button
-                className="button is-primary"
+                className="button is-primary control-button"
                 onClick={() => {
                   playQuestionSound();
                 }}
               >
-                play again
+                Play Again
               </button>
             </div>
-            <div className="column is-warning">
-              <button className="button" onClick={nextQuestion}>
-                next question
+            <div className="column">
+              <button className="button control-button" onClick={nextQuestion}>
+                Next Question
               </button>
             </div>
           </div>
