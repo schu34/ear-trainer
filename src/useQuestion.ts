@@ -62,7 +62,7 @@ export const useQuestion = () => {
 
   React.useEffect(() => {
     playQuestionSound();
-  }, [currentQuestion, playQuestionSound]);
+  }, [currentQuestion ]);
 
   return {
     playQuestionSound,

@@ -8,8 +8,10 @@ import {
 } from "./intervals";
 import { Note } from "./sound";
 
+type Mode = "interval"; // | "chord" | "scale" | "note";
+
 interface Settings {
-  mode: "interval";
+  mode: Mode;
   ascending: boolean;
   descending: boolean;
   intervalsSelection: IntervalShortName[];
@@ -35,9 +37,53 @@ const defaultSettings: Settings = {
   delay: 300,
 };
 
-export const settingsState = atom<Settings>({
-  key: "mode",
-  default: defaultSettings,
+export const settingsState = selector<Settings>({
+  key: "settings",
+  get: ({ get }) => {
+    const mode = get(settingsModeState);
+    const delay = get(settingsDelayState);
+    const ascending = get(settingsAscendingState);
+    const descending = get(settingsDescendingState);
+    const intervalsSelection = get(settingsIntervalsSelectionState);
+
+    return {
+      mode,
+      delay,
+      ascending,
+      descending,
+      intervalsSelection,
+    };
+  },
+});
+
+export const settingsModeState = atom<Mode>({
+  key: "settingsMode",
+  default: "interval",
+});
+
+export const settingsDelayState = atom({
+  key: "settingsDelay",
+  default: 300,
+});
+
+export const settingsAscendingState = atom({
+  key: "settingsAscending",
+  default: true,
+});
+
+export const settingsDescendingState = atom({
+  key: "settingsDescending",
+  default: true,
+});
+
+export const settingsIntervalsSelectionState = atom<
+  Record<IntervalShortName, boolean>
+>({
+  key: "settingsIntervalsSelection",
+  default: allIntervals.slice().reduce((acc, interval) => {
+    acc[interval] = true;
+    return acc;
+  }, {} as Record<IntervalShortName, boolean>),
 });
 
 export const questionHistoryState = atom<QuestionHistory[]>({

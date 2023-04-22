@@ -6,6 +6,7 @@ import { AudioElements } from "./sound";
 import { acoustic_grand_piano } from "./acoustic_grand_piano";
 import { statsSelector, Stats } from "./state";
 import { useQuestion } from "./useQuestion";
+import { Options } from "./options";
 
 function App() {
   const { playQuestionSound, correctAnswer, nextQuestion, guess, attempts } =
@@ -16,10 +17,10 @@ function App() {
   return (
     <div className="container ">
       <div className="title">Interval Trainer</div>
-      <br />
-      <br />
-      <br />
       <div className="columns">
+        <div className="column">
+          <Options />
+        </div>
         <div className="column is-one-third">
           <div className="columns is-mobile">
             <div className="column is-fluid">
