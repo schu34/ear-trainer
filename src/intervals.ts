@@ -20,8 +20,22 @@ const intervalsShortToLong = {
   P8: "Perfect Octave",
 };
 
+export const shortNameToInterval = Object.keys(intervalsShortToLong).reduce(
+  (acc, shortName, i) => {
+    const sn = shortName as IntervalShortName;
+    acc[sn] = {
+      shortName:sn,
+      longName: intervalsShortToLong[sn],
+      halfSteps: i
+    };
+    return acc;
+  },
+  {} as Record<IntervalShortName, Interval>
+);
+
 export type IntervalShortName = keyof typeof intervalsShortToLong;
 export type IntervalLongName = typeof intervalsShortToLong[IntervalShortName];
+
 
 export const allIntervalsShort = Object.keys(
   intervalsShortToLong

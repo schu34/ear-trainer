@@ -35,7 +35,7 @@ function App() {
             </div>
             <div className="column">
               <button className="button control-button" onClick={nextQuestion}>
-                Next Question
+                {correctAnswer ? "Next Question" : "Start"}
               </button>
             </div>
           </div>
@@ -54,7 +54,7 @@ function App() {
       <div className="column">
         <Answer attempts={attempts} correctAnswer={correctAnswer} />
       </div>
-      <AudioElements notesObj={acoustic_grand_piano} />
+      {/* <AudioElements notesObj={acoustic_grand_piano} /> */}
     </div>
   );
 }
@@ -64,9 +64,11 @@ const Answer = ({
   correctAnswer,
 }: {
   attempts: number;
-  correctAnswer: string;
+  correctAnswer?: string;
 }) => {
-  return <>{attempts > 0 && "correctAnswer: " + correctAnswer}</>;
+  return correctAnswer ? (
+    <>{attempts > 0 && "correctAnswer: " + correctAnswer}</>
+  ) : null;
 };
 
 const StatsComponent = ({ stats: { correct, total } }: { stats: Stats }) => {

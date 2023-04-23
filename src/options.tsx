@@ -7,6 +7,7 @@ import {
   settingsIntervalsSelectionState,
   settingsModeState,
 } from "./state";
+import { Interval, IntervalShortName } from "./intervals";
 
 //react component to allow user to select different options
 export function Options() {
@@ -80,9 +81,27 @@ export function Options() {
           </label>
         </div>
         <div className="field">
-          <label>
-            <input type="checkbox" name="p1" id="p1" checked={settingsIntervalSelection[p1]}></input>
-          </label>
+          {Object.keys(settingsIntervalSelection).map((interval) => {
+            return (
+              <label key={interval}>
+                <input
+                  type="checkbox"
+                  name={interval}
+                  id={interval}
+                  checked={
+                    settingsIntervalSelection[interval as IntervalShortName]
+                  }
+                  onChange={(e) => {
+                    setSettingsIntervalSelection({
+                      ...settingsIntervalSelection,
+                      [interval]: e.target.checked,
+                    });
+                  }}
+                />{" "}
+                {interval}{" "}
+              </label>
+            );
+          })}
         </div>
       </div>
     </div>

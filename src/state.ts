@@ -7,6 +7,7 @@ import {
   IntervalShortName,
 } from "./intervals";
 import { Note } from "./sound";
+import { getIntervalListFromSelection } from "./util";
 
 type Mode = "interval"; // | "chord" | "scale" | "note";
 
@@ -29,15 +30,7 @@ export interface QuestionHistory extends Question {
   correct: boolean;
 }
 
-const defaultSettings: Settings = {
-  mode: "interval",
-  ascending: true,
-  descending: true,
-  intervalsSelection: allIntervals.slice(),
-  delay: 300,
-};
-
-export const settingsState = selector<Settings>({
+export const settingsSelector = selector<Settings>({
   key: "settings",
   get: ({ get }) => {
     const mode = get(settingsModeState);
@@ -51,7 +44,7 @@ export const settingsState = selector<Settings>({
       delay,
       ascending,
       descending,
-      intervalsSelection,
+      intervalsSelection: getIntervalListFromSelection(intervalsSelection),
     };
   },
 });
@@ -91,9 +84,9 @@ export const questionHistoryState = atom<QuestionHistory[]>({
   default: [],
 });
 
-export const currentQuestionState = atom<Question>({
+export const currentQuestionState = atom<Question | null>({
   key: "currentQuestion",
-  default: createIntervalQuestion(defaultSettings),
+  default: null,
 });
 
 function getDirection(settings: Settings) {
