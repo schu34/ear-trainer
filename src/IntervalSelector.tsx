@@ -1,5 +1,5 @@
 import React from "react";
-import { intervals, Interval, shortNameToInterval } from "./intervals";
+import { Interval, shortNameToInterval } from "./intervals";
 import { settingsSelector } from "./state";
 import { useRecoilValue } from "recoil";
 
@@ -16,7 +16,7 @@ export const IntervalSelector: React.FC<IntervalSelectorProps> = ({
       <div className="box">
         <div className="columns is-multiline is-mobile is-variable is-1">
           {intervalsSelection.map((shortname) => {
-            const interval = shortNameToInterval[shortname]
+            const interval = shortNameToInterval[shortname];
             return (
               <div
                 className="column is-one-quarter buttons are-large"

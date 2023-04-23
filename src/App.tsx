@@ -2,8 +2,6 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import "./App.css";
 import { IntervalSelector } from "./IntervalSelector";
-import { AudioElements } from "./sound";
-import { acoustic_grand_piano } from "./acoustic_grand_piano";
 import { statsSelector, Stats } from "./state";
 import { useQuestion } from "./useQuestion";
 import { Options } from "./options";

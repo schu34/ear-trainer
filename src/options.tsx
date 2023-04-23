@@ -5,13 +5,11 @@ import {
   settingsDelayState,
   settingsDescendingState,
   settingsIntervalsSelectionState,
-  settingsModeState,
 } from "./state";
-import { Interval, IntervalShortName } from "./intervals";
+import type { IntervalShortName } from "./intervals";
 
 //react component to allow user to select different options
 export function Options() {
-  const [settingsMode, setSettingsModel] = useRecoilState(settingsModeState);
   const [settingsAscending, setSettingsAscending] = useRecoilState(
     settingsAscendingState
   );

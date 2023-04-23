@@ -61,10 +61,12 @@ export const useQuestion = () => {
     },
     [currentQuestion, getNextQuestion, setQuestionHistory, attempts]
   );
-
+  // we don't want to re-run this effect when the settings change, only when the
+  // question changes. `playQuestionSound` changes when the settings change (the
+  // delay in particular), so we purposely omit it from the dependency array.
   React.useEffect(() => {
     playQuestionSound();
-  }, [currentQuestion]);
+  }, [currentQuestion]); 
 
   return {
     playQuestionSound,
