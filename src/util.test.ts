@@ -15,7 +15,7 @@ describe("getRandomIntegerInRange", () => {
   });
 
   it("should pick a random number in the range", () => {
-    for (var i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1000; i++) {
       const int = getRandomIntegerInRange(1, 10);
       expect(int).toBeLessThan(10);
       expect(int).toBeGreaterThanOrEqual(1);
@@ -26,7 +26,7 @@ describe("getRandomIntegerInRange", () => {
   it("should be inclusive on the bottom only", () => {
     let oneSeen = false;
     let tenSeen = false;
-    for (var i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1000; i++) {
       const int = getRandomIntegerInRange(1, 10);
       oneSeen = oneSeen || int === 1;
       tenSeen = tenSeen || int === 10;
@@ -40,7 +40,7 @@ describe("getRandomIntegerInRange", () => {
 describe("getRandomArrayElement", () => {
   it("should pick a random element from the array", () => {
     const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    for (var i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1000; i++) {
       const int = getRandomArrayElement(arr);
       expect(int).toBeDefined();
       expect(arr).toContain(int);

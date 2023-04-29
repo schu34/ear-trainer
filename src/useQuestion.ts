@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import "./App.css";
-import { playNotesSeq, stopAllSounds } from "./sound";
+import { playNotesSeq } from "./sound";
 import {
   createIntervalQuestion,
   currentQuestionState,
@@ -31,7 +31,6 @@ export const useQuestion = () => {
     setAttempts(0);
     const nextIndex = currentQuestion ? currentQuestion.index + 1 : 0;
     setCurrentQuestion(createIntervalQuestion(settings, nextIndex));
-    stopAllSounds();
   }, [currentQuestion, setCurrentQuestion, settings]);
 
   const guess = React.useCallback(
@@ -66,7 +65,7 @@ export const useQuestion = () => {
   // delay in particular), so we purposely omit it from the dependency array.
   React.useEffect(() => {
     playQuestionSound();
-  }, [currentQuestion]); 
+  }, [currentQuestion]);
 
   return {
     playQuestionSound,

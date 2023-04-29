@@ -52,8 +52,7 @@ function App() {
       <div className="column">
         <Answer attempts={attempts} correctAnswer={correctAnswer} />
       </div>
-      {/* <AudioElements notesObj={acoustic_grand_piano} /> */}
-    </div>
+     </div>
   );
 }
 

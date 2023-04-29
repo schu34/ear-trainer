@@ -124,28 +124,3 @@ export function playNotesSeq(notes: Note[], delay: number) {
   console.log("playing notes", notes, "with delay", delay);
   playWithDelay(notes, delay);
 }
-
-export function stopAllSounds() {
-  document.querySelectorAll(".audio-el").forEach((elem) => {
-    if (elem instanceof HTMLAudioElement) {
-      elem.pause();
-      elem.currentTime = 0;
-    }
-  });
-}
-
-type AudioElementsProps = {
-  notesObj: {
-    [key in Note]?: string;
-  };
-};
-
-export const AudioElements: React.FC<AudioElementsProps> = ({ notesObj }) => {
-  return (
-    <div>
-      {Object.entries(notesObj).map(([key, value]) => {
-        return <audio className="audio-el" src={value} id={key}></audio>;
-      })}
-    </div>
-  );
-};
