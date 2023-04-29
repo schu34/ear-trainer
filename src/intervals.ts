@@ -24,9 +24,9 @@ export const shortNameToInterval = Object.keys(intervalsShortToLong).reduce(
   (acc, shortName, i) => {
     const sn = shortName as IntervalShortName;
     acc[sn] = {
-      shortName:sn,
+      shortName: sn,
       longName: intervalsShortToLong[sn],
-      halfSteps: i
+      halfSteps: i,
     };
     return acc;
   },
@@ -34,14 +34,9 @@ export const shortNameToInterval = Object.keys(intervalsShortToLong).reduce(
 );
 
 export type IntervalShortName = keyof typeof intervalsShortToLong;
-export type IntervalLongName = typeof intervalsShortToLong[IntervalShortName];
+type IntervalLongName = (typeof intervalsShortToLong)[IntervalShortName];
 
-
-export const allIntervalsShort = Object.keys(
-  intervalsShortToLong
-) as IntervalShortName[];
-
-export const allIntervalsLong = Object.values(
+const allIntervalsLong = Object.values(
   intervalsShortToLong
 ) as IntervalLongName[];
 
@@ -55,13 +50,13 @@ export interface Interval {
   halfSteps: number;
 }
 
-export const intervals: Interval[] = allIntervals.map((shortName, index) => ({
+const intervals: Interval[] = allIntervals.map((shortName, index) => ({
   shortName,
   longName: allIntervalsLong[index],
   halfSteps: index,
 }));
 
-export const intervalsByShortName: Record<IntervalShortName, Interval> =
+const intervalsByShortName: Record<IntervalShortName, Interval> =
   intervals.reduce((acc, interval) => {
     acc[interval.shortName] = interval;
     return acc;

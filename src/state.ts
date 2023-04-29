@@ -49,6 +49,7 @@ export const settingsSelector = selector<Settings>({
   },
 });
 
+/*eslint-disable import/no-unused-modules*/
 export const settingsModeState = atom<Mode>({
   key: "settingsMode",
   default: "interval",

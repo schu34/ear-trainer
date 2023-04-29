@@ -23,49 +23,9 @@ type Octave = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
 
 export type Note = `${NoteName}${Octave}`;
 
-export type Chord = Note[];
-
-export type SequenceStep = {
-  notes: Chord;
-  delay: number;
-};
-
-export type Sequence = SequenceStep[];
 const ctx = new AudioContext();
 
 const activeSourceNodes: AudioBufferSourceNode[] = [];
-
-export function playNote(note: Note) {
-  const elem = document.querySelector("#" + note);
-  if (elem instanceof HTMLAudioElement) {
-    if (elem.paused) {
-      elem.play();
-    } else {
-      elem.currentTime = 0;
-    }
-  }
-}
-
-export function makeSeq(
-  steps: (Note | Chord)[],
-  delay: number
-): SequenceStep[] {
-  return steps.map((step, i) => ({
-    notes: Array.isArray(step) ? step : [step],
-    delay: i * delay,
-  }));
-}
-
-export function makeInterval(
-  notes: [Note, Note],
-  delay: number
-): [SequenceStep, SequenceStep] {
-  return makeSeq(notes, delay) as [SequenceStep, SequenceStep];
-}
-
-export function makeChord(notes: Chord, delay: number): SequenceStep {
-  return { notes, delay };
-}
 
 function stopAllBuffers() {
   activeSourceNodes.forEach((node) => {
@@ -111,13 +71,6 @@ function createBufferFromBase64(base64?: string) {
     view[i] = binary.charCodeAt(i);
   }
   return buffer;
-}
-
-export function playSequence(seq: Sequence) {
-  seq.forEach(({ notes, delay }) => {
-    const noteArr = Array.isArray(notes) ? notes : [notes];
-    playWithDelay(noteArr, delay);
-  });
 }
 
 export function playNotesSeq(notes: Note[], delay: number) {
