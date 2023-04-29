@@ -19,9 +19,31 @@ export function Options() {
   const [settingsDelay, setSettingsDelay] = useRecoilState(settingsDelayState);
   const [settingsIntervalSelection, setSettingsIntervalSelection] =
     useRecoilState(settingsIntervalsSelectionState);
+
+  const [expanded, setExpanded] = React.useState(false);
   return (
     <div>
-      <div>
+      <button
+        className="button is-white"
+        onClick={() => setExpanded(!expanded)}
+      >
+        <h2 className="h2">Settings {expanded ? "▲" : "▼"}</h2>
+        {/* <span>
+          <i
+            className={cx("fa", {
+              "fa-chevron-down": !expanded,
+              "fa-chevron-up": expanded,
+            })}
+          ></i>
+        </span> */}
+      </button>
+      <div
+        style={{
+          maxHeight: expanded ? 1000 : 0,
+          overflow: "hidden",
+          transition: "300ms all",
+        }}
+      >
         {/* <fieldset>
 				<h3>Mode</h3>
         <input
