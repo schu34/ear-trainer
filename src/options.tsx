@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useAtom } from "jotai";
 import {
   settingsAscendingState,
   settingsDelayState,
@@ -10,15 +10,16 @@ import type { IntervalShortName } from "./intervals";
 
 //react component to allow user to select different options
 export function Options() {
-  const [settingsAscending, setSettingsAscending] = useRecoilState(
+  const [settingsAscending, setSettingsAscending] = useAtom(
     settingsAscendingState
   );
-  const [settingsDescending, setSettingsDescending] = useRecoilState(
+  const [settingsDescending, setSettingsDescending] = useAtom(
     settingsDescendingState
   );
-  const [settingsDelay, setSettingsDelay] = useRecoilState(settingsDelayState);
-  const [settingsIntervalSelection, setSettingsIntervalSelection] =
-    useRecoilState(settingsIntervalsSelectionState);
+  const [settingsDelay, setSettingsDelay] = useAtom(settingsDelayState);
+  const [settingsIntervalSelection, setSettingsIntervalSelection] = useAtom(
+    settingsIntervalsSelectionState
+  );
 
   const [expanded, setExpanded] = React.useState(false);
   return (

@@ -1,7 +1,7 @@
 import React from "react";
+import { useAtom } from "jotai";
 import { Interval, shortNameToInterval } from "./intervals";
 import { settingsSelector } from "./state";
-import { useRecoilValue } from "recoil";
 
 interface IntervalSelectorProps {
   onSelect: (interval: Interval) => void;
@@ -10,7 +10,7 @@ interface IntervalSelectorProps {
 export const IntervalSelector: React.FC<IntervalSelectorProps> = ({
   onSelect,
 }) => {
-  const { intervalsSelection } = useRecoilValue(settingsSelector);
+  const [{ intervalsSelection }] = useAtom(settingsSelector);
   return (
     <>
       <div className="box">
@@ -36,4 +36,3 @@ export const IntervalSelector: React.FC<IntervalSelectorProps> = ({
     </>
   );
 };
-

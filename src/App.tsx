@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useAtom } from "jotai";
 import "./App.css";
 import { IntervalSelector } from "./IntervalSelector";
 import { statsSelector, Stats } from "./state";
@@ -10,7 +10,7 @@ function App() {
   const { playQuestionSound, correctAnswer, nextQuestion, guess, attempts } =
     useQuestion();
 
-  const stats = useRecoilValue(statsSelector);
+  const [stats] = useAtom(statsSelector);
 
   return (
     <div className="container ">
@@ -52,7 +52,7 @@ function App() {
       <div className="column">
         <Answer attempts={attempts} correctAnswer={correctAnswer} />
       </div>
-     </div>
+    </div>
   );
 }
 

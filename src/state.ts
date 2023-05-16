@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "jotai";
 import {
   allIntervals,
   getNotesForInterval,
@@ -30,65 +30,42 @@ export interface QuestionHistory extends Question {
   correct: boolean;
 }
 
-export const settingsSelector = selector<Settings>({
-  key: "settings",
-  get: ({ get }) => {
-    const mode = get(settingsModeState);
-    const delay = get(settingsDelayState);
-    const ascending = get(settingsAscendingState);
-    const descending = get(settingsDescendingState);
-    const intervalsSelection = get(settingsIntervalsSelectionState);
+export const settingsSelector = atom<Settings>((get) => {
+  const mode = get(settingsModeState);
+  const delay = get(settingsDelayState);
+  const ascending = get(settingsAscendingState);
+  const descending = get(settingsDescendingState);
+  const intervalsSelection = get(settingsIntervalsSelectionState);
 
-    return {
-      mode,
-      delay,
-      ascending,
-      descending,
-      intervalsSelection: getIntervalListFromSelection(intervalsSelection),
-    };
-  },
+  return {
+    mode,
+    delay,
+    ascending,
+    descending,
+    intervalsSelection: getIntervalListFromSelection(intervalsSelection),
+  };
 });
 
-/*eslint-disable import/no-unused-modules*/
-export const settingsModeState = atom<Mode>({
-  key: "settingsMode",
-  default: "interval",
-});
+const settingsModeState = atom<Mode>("interval");
 
-export const settingsDelayState = atom({
-  key: "settingsDelay",
-  default: 300,
-});
+export const settingsDelayState = atom(300);
 
-export const settingsAscendingState = atom({
-  key: "settingsAscending",
-  default: true,
-});
+export const settingsAscendingState = atom(true);
 
-export const settingsDescendingState = atom({
-  key: "settingsDescending",
-  default: true,
-});
+export const settingsDescendingState = atom(true);
 
 export const settingsIntervalsSelectionState = atom<
   Record<IntervalShortName, boolean>
->({
-  key: "settingsIntervalsSelection",
-  default: allIntervals.slice().reduce((acc, interval) => {
+>(
+  allIntervals.slice().reduce((acc, interval) => {
     acc[interval] = true;
     return acc;
-  }, {} as Record<IntervalShortName, boolean>),
-});
+  }, {} as Record<IntervalShortName, boolean>)
+);
 
-export const questionHistoryState = atom<QuestionHistory[]>({
-  key: "questionHistory",
-  default: [],
-});
+export const questionHistoryState = atom<QuestionHistory[]>([]);
 
-export const currentQuestionState = atom<Question | null>({
-  key: "currentQuestion",
-  default: null,
-});
+export const currentQuestionState = atom<Question | null>(null);
 
 function getDirection(settings: Settings) {
   if (settings.ascending && settings.descending) {
@@ -127,18 +104,15 @@ export interface Stats {
   percentCorrect: number;
 }
 
-export const statsSelector = selector<Stats>({
-  key: "stats",
-  get: ({ get }) => {
-    const history = get(questionHistoryState);
-    const correct = history.filter(({ correct }) => correct).length;
-    const incorrect = history.filter(({ correct }) => !correct).length;
+export const statsSelector = atom<Stats>((get) => {
+  const history = get(questionHistoryState);
+  const correct = history.filter(({ correct }) => correct).length;
+  const incorrect = history.filter(({ correct }) => !correct).length;
 
-    return {
-      total: history.length,
-      correct,
-      incorrect,
-      percentCorrect: Math.round((correct / history.length) * 100),
-    };
-  },
+  return {
+    total: history.length,
+    correct,
+    incorrect,
+    percentCorrect: Math.round((correct / history.length) * 100),
+  };
 });

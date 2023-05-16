@@ -1,5 +1,4 @@
 import React from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import "./App.css";
 import { playNotesSeq } from "./sound";
 import {
@@ -11,14 +10,14 @@ import {
 } from "./state";
 import { Interval } from "./intervals";
 import produce from "immer";
+import { useAtom, useSetAtom } from "jotai";
 
 export const useQuestion = () => {
-  const [currentQuestion, setCurrentQuestion] =
-    useRecoilState(currentQuestionState);
+  const [currentQuestion, setCurrentQuestion] = useAtom(currentQuestionState);
 
-  const setQuestionHistory = useSetRecoilState(questionHistoryState);
+  const setQuestionHistory = useSetAtom(questionHistoryState);
 
-  const settings = useRecoilValue(settingsSelector);
+  const [settings] = useAtom(settingsSelector);
   const [attempts, setAttempts] = React.useState(0);
 
   const playQuestionSound = React.useCallback(() => {
