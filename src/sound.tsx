@@ -1,4 +1,7 @@
-import { acoustic_grand_piano } from "./acoustic_grand_piano";
+const getMidiNote = async (note: Note) => {
+  const { acoustic_grand_piano } = await import("./acoustic_grand_piano");
+  return acoustic_grand_piano[note];
+};
 
 type NoteName =
   | "Ab"
@@ -43,19 +46,18 @@ async function playWithDelay(notes: Note[], delay: number) {
   //resume it here. Particularly a problem in Safari.
   ctx.resume();
 
-  notes.forEach((note, idx) => {
-    if (!acoustic_grand_piano[note]) {
+  notes.forEach(async (note, idx) => {
+    const noteData = await getMidiNote(note);
+    if (!noteData) {
       throw new Error("note out of bounds");
     }
     const b = ctx.createBufferSource();
     activeSourceNodes.push(b);
     b.connect(ctx.destination);
-    ctx
-      .decodeAudioData(createBufferFromBase64(acoustic_grand_piano[note]))
-      .then((buffer) => {
-        b.buffer = buffer;
-        b.start(ctx.currentTime + (delay * idx) / 1000);
-      });
+    ctx.decodeAudioData(createBufferFromBase64(noteData)).then((buffer) => {
+      b.buffer = buffer;
+      b.start(ctx.currentTime + (delay * idx) / 1000);
+    });
   });
 }
 
