@@ -1,8 +1,5 @@
-import { Note } from "./sound";
+import { Note, allNotes } from "./sound";
 import { getRandomIntegerInRange } from "./util";
-import { acoustic_grand_piano } from "./acoustic_grand_piano";
-
-const defaultNotes = Object.keys(acoustic_grand_piano) as Note[];
 
 const intervalsShortToLong = {
   P1: "Perfect Unison",
@@ -24,6 +21,7 @@ export const shortNameToInterval = Object.keys(intervalsShortToLong).reduce(
   (acc, shortName, i) => {
     const sn = shortName as IntervalShortName;
     acc[sn] = {
+      type: "INTERVAL",
       shortName: sn,
       longName: intervalsShortToLong[sn],
       halfSteps: i,
@@ -45,12 +43,14 @@ export const allIntervals = Object.keys(
 ) as IntervalShortName[];
 
 export interface Interval {
+  type: "INTERVAL";
   shortName: IntervalShortName;
   longName: IntervalLongName;
   halfSteps: number;
 }
 
 const intervals: Interval[] = allIntervals.map((shortName, index) => ({
+  type: "INTERVAL",
   shortName,
   longName: allIntervalsLong[index],
   halfSteps: index,
@@ -65,20 +65,19 @@ const intervalsByShortName: Record<IntervalShortName, Interval> =
 export function getRandomInterval(
   options: IntervalShortName[] = allIntervals.slice()
 ): Interval {
-  const selection = Math.floor(Math.random() * options.length);
+  const selection = getRandomIntegerInRange(0, options.length - 1);
   const intervalName = options[selection];
   return intervalsByShortName[intervalName];
 }
 
 export function getNotesForInterval({
   halfSteps,
-  notes = defaultNotes,
   ascending = true,
 }: {
   halfSteps: number;
-  notes?: Note[];
   ascending?: boolean;
 }): [Note, Note] {
+  const notes = allNotes;
   const maximumIndexForLowNote = notes.length - halfSteps;
 
   const lowNote = getRandomIntegerInRange(0, maximumIndexForLowNote);
@@ -87,4 +86,23 @@ export function getNotesForInterval({
   return ascending
     ? [notes[lowNote], notes[highNote]]
     : [notes[highNote], notes[lowNote]];
+}
+
+export function getNoteByInterval(
+  start: Note,
+  interval: IntervalShortName,
+  up = true
+) {
+  const notes = allNotes;
+  const intervalObj = intervalsByShortName[interval];
+  const startIndex = notes.indexOf(start);
+  let endIndex;
+  if (up) {
+    endIndex = startIndex + intervalObj.halfSteps;
+  } else {
+    endIndex = startIndex - intervalObj.halfSteps;
+  }
+  if (!notes[endIndex])
+    throw new Error(`No note found for interval ${interval} from ${start}`);
+  return notes[endIndex];
 }

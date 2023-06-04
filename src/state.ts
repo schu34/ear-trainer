@@ -7,52 +7,89 @@ import {
   IntervalShortName,
 } from "./intervals";
 import { Note } from "./sound";
-import { getIntervalListFromSelection } from "./util";
+import { getRandomArrayElement, getTruthyKeys } from "./util";
+import {
+  Chord,
+  ChordType,
+  chordTypes,
+  getNotesForChord,
+  getRandomChord,
+} from "./chord";
 
-type Mode = "interval"; // | "chord" | "scale" | "note";
+const modes = ["interval", "chord"];
+type Mode = (typeof modes)[number];
 
 interface Settings {
   mode: Mode;
   ascending: boolean;
   descending: boolean;
+  unison: boolean;
   intervalsSelection: IntervalShortName[];
+  chordSelection: ChordType[];
   delay: number;
 }
 
-interface Question {
+type IntervalQuestion = {
   mode: "interval";
   answer: Interval;
   notes: Note[];
   index: number;
-}
+};
 
-export interface QuestionHistory extends Question {
+type ChordQuestion = {
+  mode: "chord";
+  answer: Chord;
+  notes: Note[];
+  index: number;
+};
+
+type Question = IntervalQuestion | ChordQuestion;
+
+interface IntervalQuestionHistory extends IntervalQuestion {
   correct: boolean;
 }
+
+interface ChordQuestionHistory extends ChordQuestion {
+  correct: boolean;
+}
+
+export type QuestionHistory = IntervalQuestionHistory | ChordQuestionHistory;
 
 export const settingsSelector = atom<Settings>((get) => {
   const mode = get(settingsModeState);
   const delay = get(settingsDelayState);
   const ascending = get(settingsAscendingState);
   const descending = get(settingsDescendingState);
+  const unison = get(settingsUnisonState);
   const intervalsSelection = get(settingsIntervalsSelectionState);
+  const chordSelection = get(chordSelectionState);
 
   return {
     mode,
     delay,
     ascending,
     descending,
-    intervalsSelection: getIntervalListFromSelection(intervalsSelection),
+    unison,
+    intervalsSelection: getTruthyKeys(intervalsSelection),
+    chordSelection: getTruthyKeys<ChordType>(chordSelection),
   };
 });
 
-const settingsModeState = atom<Mode>("interval");
+export enum Direction {
+  ascending = "ascending",
+  descending = "descending",
+  unison = "unison",
+}
+
+export const settingsModeState = atom<Mode>("interval");
 
 export const settingsDelayState = atom(300);
 
 export const settingsAscendingState = atom(true);
 
 export const settingsDescendingState = atom(true);
+
+export const settingsUnisonState = atom(true);
 
 export const settingsIntervalsSelectionState = atom<
   Record<IntervalShortName, boolean>
@@ -63,25 +100,46 @@ export const settingsIntervalsSelectionState = atom<
   }, {} as Record<IntervalShortName, boolean>)
 );
 
-export const questionHistoryState = atom<QuestionHistory[]>([]);
+export const chordSelectionState = atom<Record<string, boolean>>(
+  chordTypes.reduce((acc, chord) => {
+    acc[chord] = true;
+    return acc;
+  }, {} as Record<string, boolean>)
+);
+
+export const questionHistoryState = atom<
+  (ChordQuestionHistory | IntervalQuestionHistory)[]
+>([]);
 
 export const currentQuestionState = atom<Question | null>(null);
 
-function getDirection(settings: Settings) {
-  if (settings.ascending && settings.descending) {
-    return Math.random() > 0.5 ? "ascending" : "descending";
-  } else if (settings.ascending) {
-    return "ascending";
-  } else if (settings.descending) {
-    return "descending";
-  }
-  throw new Error("No direction selected");
+function getDirection(settings: Settings): Direction {
+  const possibleDirections: Direction[] = [
+    Direction.ascending,
+    Direction.descending,
+    Direction.unison,
+  ].filter((direction) => settings[direction as keyof Settings]);
+  return getRandomArrayElement(possibleDirections);
+  // throw new Error("No direction selected");
 }
 
-export function createIntervalQuestion(
+export function createQuestion(settings: Settings, index: number): Question {
+  const creator = questionCreators[settings.mode];
+  return creator(settings, index);
+}
+
+const questionCreators: Record<
+  Mode,
+  (settings: Settings, index: number) => Question
+> = {
+  interval: createIntervalQuestion,
+  chord: createChordQuestion,
+};
+
+function createIntervalQuestion(
   settings: Settings,
   index = 0
-): Question {
+): IntervalQuestion {
   const direction = getDirection(settings);
   const interval = getRandomInterval(settings.intervalsSelection);
   const notes = getNotesForInterval({
@@ -95,6 +153,24 @@ export function createIntervalQuestion(
     notes,
     index,
   };
+}
+
+function createChordQuestion(settings: Settings, index = 0): ChordQuestion {
+  const direction = getDirection(settings);
+  const chord = getRandomChord();
+  const notes = getNotesForChord(chord.shortName, direction);
+
+  return {
+    mode: "chord",
+    answer: chord,
+    notes,
+    index,
+  };
+}
+
+export function getQuestionHistory(settings: Settings) {
+  //TODO: implement
+  return [];
 }
 
 export interface Stats {

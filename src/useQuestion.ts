@@ -2,15 +2,18 @@ import React from "react";
 import "./App.css";
 import { playNotesSeq } from "./sound";
 import {
-  createIntervalQuestion,
   currentQuestionState,
   questionHistoryState,
   settingsSelector,
+  createQuestion,
   QuestionHistory,
 } from "./state";
 import { Interval } from "./intervals";
 import produce from "immer";
 import { useAtom, useSetAtom } from "jotai";
+import { Chord } from "./chord";
+import { assert } from "console";
+import { assertNever } from "./util";
 
 export const useQuestion = () => {
   const [currentQuestion, setCurrentQuestion] = useAtom(currentQuestionState);
@@ -29,32 +32,41 @@ export const useQuestion = () => {
     // if (!currentQuestion) return;
     setAttempts(0);
     const nextIndex = currentQuestion ? currentQuestion.index + 1 : 0;
-    setCurrentQuestion(createIntervalQuestion(settings, nextIndex));
+    setCurrentQuestion(createQuestion(settings, nextIndex));
   }, [currentQuestion, setCurrentQuestion, settings]);
 
   const guess = React.useCallback(
-    (interval: Interval) => {
+    (answer: Interval | Chord) => {
       if (!currentQuestion) return;
-      if (interval.shortName === currentQuestion.answer.shortName) {
-        setQuestionHistory((prev: QuestionHistory[]) => {
-          return produce(prev, (draft) => {
-            draft[currentQuestion.index] = {
-              ...currentQuestion,
-              correct: true && (prev?.[currentQuestion.index]?.correct ?? true),
-            };
-          });
-        });
-        getNextQuestion();
-      } else {
-        setAttempts(attempts + 1);
-        setQuestionHistory((prev: QuestionHistory[]) => {
-          return produce(prev, (draft) => {
-            draft[currentQuestion.index] = {
-              ...currentQuestion,
-              correct: false,
-            };
-          });
-        });
+      switch (answer.type) {
+        case "INTERVAL":
+          if (answer.shortName === currentQuestion.answer.shortName) {
+            setQuestionHistory((prev: QuestionHistory[]) => {
+              return produce(prev, (draft) => {
+                draft[currentQuestion.index] = {
+                  ...currentQuestion,
+                  correct:
+                    true && (prev?.[currentQuestion.index]?.correct ?? true),
+                };
+              });
+            });
+            getNextQuestion();
+          } else {
+            setAttempts(attempts + 1);
+            setQuestionHistory((prev: QuestionHistory[]) => {
+              return produce(prev, (draft) => {
+                draft[currentQuestion.index] = {
+                  ...currentQuestion,
+                  correct: false,
+                };
+              });
+            });
+          }
+          return;
+        case "CHORD":
+          return;
+        default:
+          assertNever(answer);
       }
     },
     [currentQuestion, getNextQuestion, setQuestionHistory, attempts]

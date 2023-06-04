@@ -5,6 +5,7 @@ import {
   settingsDelayState,
   settingsDescendingState,
   settingsIntervalsSelectionState,
+  settingsModeState,
 } from "./state";
 import type { IntervalShortName } from "./intervals";
 
@@ -21,6 +22,8 @@ export function Options() {
     settingsIntervalsSelectionState
   );
 
+  const [settingsMode, setSettingsMode] = useAtom(settingsModeState);
+
   const [expanded, setExpanded] = React.useState(false);
   return (
     <div>
@@ -29,14 +32,6 @@ export function Options() {
         onClick={() => setExpanded(!expanded)}
       >
         <h2 className="h2">Settings {expanded ? "▲" : "▼"}</h2>
-        {/* <span>
-          <i
-            className={cx("fa", {
-              "fa-chevron-down": !expanded,
-              "fa-chevron-up": expanded,
-            })}
-          ></i>
-        </span> */}
       </button>
       <div
         style={{
@@ -45,18 +40,35 @@ export function Options() {
           transition: "300ms all",
         }}
       >
-        {/* <fieldset>
-				<h3>Mode</h3>
-        <input
-          type="radio"
-          name="mode"
-          id="interval"
-          value="interval"
-          checked={settingsMode === "interval"}
-        />{" "}
-        <label>Interval</label>
-        <input type="radio" name="mode" id="chord" value="chord" checked={settingsMode === "chord"}/>
-      </fieldset> */}
+        <fieldset>
+          <h3>Mode</h3>
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              id="interval"
+              value="interval"
+              checked={settingsMode === "interval"}
+              onChange={(e) => {
+                setSettingsMode(e.target.value);
+              }}
+            />{" "}
+            Interval
+          </label>{" "}
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              id="chord"
+              value="chord"
+              checked={settingsMode === "chord"}
+              onChange={(e) => {
+                setSettingsMode(e.target.value);
+              }}
+            />{" "}
+            Chord
+          </label>
+        </fieldset>
         <div className="field">
           <label className="label" htmlFor="delay">
             Delay ({settingsDelay}ms)

@@ -1,8 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
 import "./App.css";
-import { IntervalSelector } from "./IntervalSelector";
-import { statsSelector, Stats } from "./state";
+import { ChordSelector, IntervalSelector } from "./IntervalSelector";
+import { statsSelector, Stats, settingsModeState } from "./state";
 import { useQuestion } from "./useQuestion";
 import { Options } from "./options";
 
@@ -11,6 +11,8 @@ function App() {
     useQuestion();
 
   const [stats] = useAtom(statsSelector);
+
+  const [mode] = useAtom(settingsModeState);
 
   return (
     <div className="container ">
@@ -41,11 +43,11 @@ function App() {
       </div>
       <div className="columns">
         <div className="column is-one-third">
-          <IntervalSelector
-            onSelect={(arg) => {
-              guess(arg);
-            }}
-          />
+          {mode === "interval" ? (
+            <IntervalSelector onSelect={guess} />
+          ) : (
+            <ChordSelector onSelect={guess} />
+          )}
         </div>
         <StatsComponent stats={stats} />
       </div>

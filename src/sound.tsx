@@ -22,6 +22,21 @@ type NoteName =
   | "G"
   | "G#";
 
+const notesWithFlats: NoteName[] = [
+  "C",
+  "Db",
+  "D",
+  "Eb",
+  "E",
+  "F",
+  "Gb",
+  "G",
+  "Ab",
+  "A",
+  "Bb",
+  "B",
+];
+
 type Octave = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
 
 export type Note = `${NoteName}${Octave}`;
@@ -29,6 +44,19 @@ export type Note = `${NoteName}${Octave}`;
 const ctx = new AudioContext();
 
 const activeSourceNodes: AudioBufferSourceNode[] = [];
+
+//returns a list of all allowed notes (C3 to g6 currently)
+function getAllNotes() {
+  const notes: Note[] = [];
+  for (let octave = 3; octave <= 6; octave++) {
+    for (const note of notesWithFlats) {
+      notes.push(`${note}${octave}` as Note);
+    }
+  }
+  return notes;
+}
+
+export const allNotes = getAllNotes();
 
 function stopAllBuffers() {
   activeSourceNodes.forEach((node) => {

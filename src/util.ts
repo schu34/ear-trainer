@@ -1,5 +1,3 @@
-import { IntervalShortName } from "./intervals";
-
 export function assert(condition: boolean, err: string) {
   if (condition) return;
   throw new Error(err);
@@ -19,10 +17,18 @@ export function getRandomArrayElement<T>(arr: T[]) {
   return arr[getRandomIntegerInRange(0, arr.length)];
 }
 
-export function getIntervalListFromSelection(
-  selection: Record<IntervalShortName, boolean>
-): IntervalShortName[] {
-  return Object.keys(selection).filter(
-    (key) => selection[key as IntervalShortName]
-  ) as IntervalShortName[];
+export function getTruthyKeys<T extends string>(
+  selection: Record<T, boolean>
+): T[] {
+  return Object.keys(selection).filter((key) => selection[key as T]) as T[];
+}
+
+export function keys<T extends string>(obj: Record<T, unknown>) {
+  return Object.keys(obj) as unknown as T;
+}
+
+export function assertNever(x: never) {
+  if (x) {
+    throw new Error("Unexpected object: " + x);
+  }
 }
