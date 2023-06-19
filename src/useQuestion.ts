@@ -12,7 +12,6 @@ import { Interval } from "./intervals";
 import produce from "immer";
 import { useAtom, useSetAtom } from "jotai";
 import { Chord } from "./chord";
-import { assert } from "console";
 import { assertNever } from "./util";
 
 export const useQuestion = () => {
@@ -21,11 +20,12 @@ export const useQuestion = () => {
   const setQuestionHistory = useSetAtom(questionHistoryState);
 
   const [settings] = useAtom(settingsSelector);
+  console.log("settings:", settings);
   const [attempts, setAttempts] = React.useState(0);
 
   const playQuestionSound = React.useCallback(() => {
     if (!currentQuestion) return;
-    playNotesSeq(currentQuestion.notes, settings.delay);
+    playNotesSeq(currentQuestion.notes, settings.unison ? 0 : settings.delay);
   }, [currentQuestion, settings.delay]);
 
   const getNextQuestion = React.useCallback(() => {
@@ -38,36 +38,28 @@ export const useQuestion = () => {
   const guess = React.useCallback(
     (answer: Interval | Chord) => {
       if (!currentQuestion) return;
-      switch (answer.type) {
-        case "INTERVAL":
-          if (answer.shortName === currentQuestion.answer.shortName) {
-            setQuestionHistory((prev: QuestionHistory[]) => {
-              return produce(prev, (draft) => {
-                draft[currentQuestion.index] = {
-                  ...currentQuestion,
-                  correct:
-                    true && (prev?.[currentQuestion.index]?.correct ?? true),
-                };
-              });
-            });
-            getNextQuestion();
-          } else {
-            setAttempts(attempts + 1);
-            setQuestionHistory((prev: QuestionHistory[]) => {
-              return produce(prev, (draft) => {
-                draft[currentQuestion.index] = {
-                  ...currentQuestion,
-                  correct: false,
-                };
-              });
-            });
-          }
-          return;
-        case "CHORD":
-          return;
-        default:
-          assertNever(answer);
+      if (answer.shortName === currentQuestion.answer.shortName) {
+        setQuestionHistory((prev: QuestionHistory[]) => {
+          return produce(prev, (draft) => {
+            draft[currentQuestion.index] = {
+              ...currentQuestion,
+              correct: true && (prev?.[currentQuestion.index]?.correct ?? true),
+            };
+          });
+        });
+        getNextQuestion();
+      } else {
+        setAttempts(attempts + 1);
+        setQuestionHistory((prev: QuestionHistory[]) => {
+          return produce(prev, (draft) => {
+            draft[currentQuestion.index] = {
+              ...currentQuestion,
+              correct: false,
+            };
+          });
+        });
       }
+      return;
     },
     [currentQuestion, getNextQuestion, setQuestionHistory, attempts]
   );

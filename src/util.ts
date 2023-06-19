@@ -13,7 +13,9 @@ export function getRandomIntegerInRange(low: number, high: number) {
   return low + Math.floor(Math.random() * distance);
 }
 
-export function getRandomArrayElement<T>(arr: T[]) {
+export function getRandomArrayElement<T extends readonly unknown[]>(
+  arr: T
+): T[number] {
   return arr[getRandomIntegerInRange(0, arr.length)];
 }
 

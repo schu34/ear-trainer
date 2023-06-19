@@ -62,7 +62,7 @@ export const settingsSelector = atom<Settings>((get) => {
   const descending = get(settingsDescendingState);
   const unison = get(settingsUnisonState);
   const intervalsSelection = get(settingsIntervalsSelectionState);
-  const chordSelection = get(chordSelectionState);
+  const chordSelection = get(settingsChordSelectionState);
 
   return {
     mode,
@@ -100,7 +100,7 @@ export const settingsIntervalsSelectionState = atom<
   }, {} as Record<IntervalShortName, boolean>)
 );
 
-export const chordSelectionState = atom<Record<string, boolean>>(
+export const settingsChordSelectionState = atom<Record<string, boolean>>(
   chordTypes.reduce((acc, chord) => {
     acc[chord] = true;
     return acc;
@@ -114,7 +114,7 @@ export const questionHistoryState = atom<
 export const currentQuestionState = atom<Question | null>(null);
 
 function getDirection(settings: Settings): Direction {
-  const possibleDirections: Direction[] = [
+  const possibleDirections: readonly Direction[] = [
     Direction.ascending,
     Direction.descending,
     Direction.unison,
@@ -157,7 +157,7 @@ function createIntervalQuestion(
 
 function createChordQuestion(settings: Settings, index = 0): ChordQuestion {
   const direction = getDirection(settings);
-  const chord = getRandomChord();
+  const chord = getRandomChord(settings.chordSelection);
   const notes = getNotesForChord(chord.shortName, direction);
 
   return {
