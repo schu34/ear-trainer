@@ -34,6 +34,7 @@ type IntervalQuestion = {
   answer: Interval;
   notes: Note[];
   index: number;
+  direction: Direction;
 };
 
 type ChordQuestion = {
@@ -41,6 +42,7 @@ type ChordQuestion = {
   answer: Chord;
   notes: Note[];
   index: number;
+  direction: Direction;
 };
 
 type Question = IntervalQuestion | ChordQuestion;
@@ -152,6 +154,7 @@ function createIntervalQuestion(
     answer: interval,
     notes,
     index,
+    direction
   };
 }
 
@@ -165,9 +168,9 @@ function createChordQuestion(settings: Settings, index = 0): ChordQuestion {
     answer: chord,
     notes,
     index,
+    direction
   };
 }
-
 
 export interface Stats {
   total: number;

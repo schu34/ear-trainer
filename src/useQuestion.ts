@@ -24,7 +24,8 @@ export const useQuestion = () => {
 
   const playQuestionSound = React.useCallback(() => {
     if (!currentQuestion) return;
-    playNotesSeq(currentQuestion.notes, settings.unison ? 0 : settings.delay);
+    const isQuestionUnison = currentQuestion.direction === "unison";
+    playNotesSeq(currentQuestion.notes, isQuestionUnison ? 0 : settings.delay);
   }, [currentQuestion, settings.delay]);
 
   const getNextQuestion = React.useCallback(() => {

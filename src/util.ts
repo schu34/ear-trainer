@@ -16,7 +16,8 @@ export function getRandomIntegerInRange(low: number, high: number) {
 export function getRandomArrayElement<T extends readonly unknown[]>(
   arr: T
 ): T[number] {
-  return arr[getRandomIntegerInRange(0, arr.length)];
+  const index = getRandomIntegerInRange(0, arr.length)
+  return arr[index];
 }
 
 export function getTruthyKeys<T extends string>(
