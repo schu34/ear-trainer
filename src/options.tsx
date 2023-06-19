@@ -10,7 +10,6 @@ import {
   settingsUnisonState,
 } from "./state";
 import type { IntervalShortName } from "./intervals";
-import { set } from "immer/dist/internal";
 
 //react component to allow user to select different options
 export function Options() {

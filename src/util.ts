@@ -25,12 +25,12 @@ export function getTruthyKeys<T extends string>(
   return Object.keys(selection).filter((key) => selection[key as T]) as T[];
 }
 
-export function keys<T extends string>(obj: Record<T, unknown>) {
-  return Object.keys(obj) as unknown as T;
-}
+// export function keys<T extends string>(obj: Record<T, unknown>) {
+//   return Object.keys(obj) as unknown as T;
+// }
 
-export function assertNever(x: never) {
-  if (x) {
-    throw new Error("Unexpected object: " + x);
-  }
-}
+// export function assertNever(x: never) {
+//   if (x) {
+//     throw new Error("Unexpected object: " + x);
+//   }
+// }

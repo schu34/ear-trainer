@@ -1,10 +1,7 @@
 import { allNotes, Note } from "./sound";
 import { getRandomArrayElement, getRandomIntegerInRange } from "./util";
-import { keys } from "./util";
 import {
   getNoteByInterval,
-  getNotesForInterval,
-  Interval,
   IntervalShortName,
   shortNameToInterval,
 } from "./intervals";

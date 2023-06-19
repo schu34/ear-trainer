@@ -168,10 +168,6 @@ function createChordQuestion(settings: Settings, index = 0): ChordQuestion {
   };
 }
 
-export function getQuestionHistory(settings: Settings) {
-  //TODO: implement
-  return [];
-}
 
 export interface Stats {
   total: number;
