@@ -12,7 +12,6 @@ import { Interval } from "./intervals";
 import produce from "immer";
 import { useAtom, useSetAtom } from "jotai";
 import { Chord } from "./chord";
-import { assertNever } from "./util";
 
 export const useQuestion = () => {
   const [currentQuestion, setCurrentQuestion] = useAtom(currentQuestionState);
