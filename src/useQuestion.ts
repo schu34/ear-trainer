@@ -74,6 +74,7 @@ export const useQuestion = () => {
 
   return {
     playQuestionSound,
+    //TODO: this should probably return the whole answer
     correctAnswer: currentQuestion?.answer.longName,
     nextQuestion: getNextQuestion,
     guess,
