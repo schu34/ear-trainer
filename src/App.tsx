@@ -7,8 +7,7 @@ import { useQuestion } from "./useQuestion";
 import { Options } from "./options";
 
 function App() {
-  const { playQuestionSound, correctAnswer, nextQuestion, guess, attempts } =
-    useQuestion();
+  const { guess } = useQuestion();
 
   const [stats] = useAtom(statsSelector);
 
@@ -21,25 +20,7 @@ function App() {
         <div className="column">
           <Options />
         </div>
-        <div className="column is-one-third">
-          <div className="columns is-mobile">
-            <div className="column is-fluid">
-              <button
-                className="button is-primary control-button"
-                onClick={() => {
-                  playQuestionSound();
-                }}
-              >
-                Play Again
-              </button>
-            </div>
-            <div className="column">
-              <button className="button control-button" onClick={nextQuestion}>
-                {correctAnswer ? "Next Question" : "Start"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <Controls />
       </div>
       <div className="columns">
         <div className="column is-one-third">
@@ -52,19 +33,38 @@ function App() {
         <StatsComponent stats={stats} />
       </div>
       <div className="column">
-        <Answer attempts={attempts} correctAnswer={correctAnswer} />
+        <Answer />
       </div>
     </div>
   );
 }
 
-const Answer = ({
-  attempts,
-  correctAnswer,
-}: {
-  attempts: number;
-  correctAnswer?: string;
-}) => {
+const Controls = () => {
+  const { playQuestionSound, correctAnswer, nextQuestion } = useQuestion();
+  return (
+    <div className="column is-one-third">
+      <div className="columns is-mobile">
+        <div className="column is-fluid">
+          <button
+            className="button is-primary control-button"
+            onClick={() => {
+              playQuestionSound();
+            }}
+          >
+            Play Again
+          </button>
+        </div>
+        <div className="column">
+          <button className="button control-button" onClick={nextQuestion}>
+            {correctAnswer ? "Next Question" : "Start"}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+const Answer = () => {
+  const { attempts, correctAnswer } = useQuestion()
   return correctAnswer ? (
     <>{attempts > 0 && "correctAnswer: " + correctAnswer}</>
   ) : null;

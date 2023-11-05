@@ -109,6 +109,8 @@ export const settingsChordSelectionState = atom<Record<string, boolean>>(
   }, {} as Record<string, boolean>)
 );
 
+export const attemptsState = atom<number>(0);
+
 export const questionHistoryState = atom<
   (ChordQuestionHistory | IntervalQuestionHistory)[]
 >([]);

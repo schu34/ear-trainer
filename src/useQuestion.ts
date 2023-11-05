@@ -7,6 +7,7 @@ import {
   settingsSelector,
   createQuestion,
   QuestionHistory,
+  attemptsState,
 } from "./state";
 import { Interval } from "./intervals";
 import produce from "immer";
@@ -20,7 +21,7 @@ export const useQuestion = () => {
 
   const [settings] = useAtom(settingsSelector);
   console.log("settings:", settings);
-  const [attempts, setAttempts] = React.useState(0);
+  const [attempts, setAttempts] = useAtom(attemptsState);
 
   const playQuestionSound = React.useCallback(() => {
     if (!currentQuestion) return;
@@ -63,6 +64,7 @@ export const useQuestion = () => {
     },
     [currentQuestion, getNextQuestion, setQuestionHistory, attempts]
   );
+
   // we don't want to re-run this effect when the settings change, only when the
   // question changes. `playQuestionSound` changes when the settings change (the
   // delay in particular), so we purposely omit it from the dependency array.
