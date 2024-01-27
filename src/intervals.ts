@@ -106,3 +106,5 @@ export function getNoteByInterval(
     throw new Error(`No note found for interval ${interval} from ${start}`);
   return notes[endIndex];
 }
+
+export { allNotes };

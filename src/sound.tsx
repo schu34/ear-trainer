@@ -1,3 +1,5 @@
+import { getContext } from "./audioContext";
+
 const getMidiNote = async (note: Note) => {
   const { acoustic_grand_piano } = await import("./acoustic_grand_piano");
   return acoustic_grand_piano[note];
@@ -41,9 +43,9 @@ type Octave = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
 
 export type Note = `${NoteName}${Octave}`;
 
-const ctx = new AudioContext();
-
 const activeSourceNodes: AudioBufferSourceNode[] = [];
+export const minNote = "C3" as Note;
+export const maxNote = "G6" as Note;
 
 //returns a list of all allowed notes (C3 to g6 currently)
 function getAllNotes() {
@@ -53,7 +55,8 @@ function getAllNotes() {
       notes.push(`${note}${octave}` as Note);
     }
   }
-  return notes;
+  const indexOfMaxNote = notes.indexOf(maxNote);
+  return notes.slice(0, indexOfMaxNote + 1);
 }
 
 export const allNotes = getAllNotes();
@@ -69,6 +72,7 @@ function stopAllBuffers() {
 }
 
 async function playWithDelay(notes: Note[], delay: number) {
+  const ctx = getContext();
   stopAllBuffers();
   //sometimes the context is can enter the interrupted state, so we need to
   //resume it here. Particularly a problem in Safari.
@@ -77,7 +81,7 @@ async function playWithDelay(notes: Note[], delay: number) {
   notes.forEach(async (note, idx) => {
     const noteData = await getMidiNote(note);
     if (!noteData) {
-      throw new Error("note out of bounds");
+      throw new Error(`note ${note} out of bounds`);
     }
     const b = ctx.createBufferSource();
     activeSourceNodes.push(b);

@@ -45,14 +45,16 @@ const Controls = () => {
     <div className="column is-one-third">
       <div className="columns is-mobile">
         <div className="column is-fluid">
-          <button
-            className="button is-primary control-button"
-            onClick={() => {
-              playQuestionSound();
-            }}
-          >
-            Play Again
-          </button>
+          {correctAnswer && (
+            <button
+              className="button is-primary control-button"
+              onClick={() => {
+                playQuestionSound();
+              }}
+            >
+              Play Again
+            </button>
+          )}
         </div>
         <div className="column">
           <button className="button control-button" onClick={nextQuestion}>
@@ -61,10 +63,10 @@ const Controls = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 const Answer = () => {
-  const { attempts, correctAnswer } = useQuestion()
+  const { attempts, correctAnswer } = useQuestion();
   return correctAnswer ? (
     <>{attempts > 0 && "correctAnswer: " + correctAnswer}</>
   ) : null;
