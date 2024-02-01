@@ -62,7 +62,7 @@ export const useQuestion = () => {
       }
       return;
     },
-    [currentQuestion, getNextQuestion, setQuestionHistory, attempts]
+    [currentQuestion, getNextQuestion, setQuestionHistory, attempts],
   );
 
   // we don't want to re-run this effect when the settings change, only when the

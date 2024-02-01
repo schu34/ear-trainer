@@ -96,17 +96,23 @@ export const settingsUnisonState = atom(true);
 export const settingsIntervalsSelectionState = atom<
   Record<IntervalShortName, boolean>
 >(
-  allIntervals.slice().reduce((acc, interval) => {
-    acc[interval] = true;
-    return acc;
-  }, {} as Record<IntervalShortName, boolean>)
+  allIntervals.slice().reduce(
+    (acc, interval) => {
+      acc[interval] = true;
+      return acc;
+    },
+    {} as Record<IntervalShortName, boolean>,
+  ),
 );
 
 export const settingsChordSelectionState = atom<Record<string, boolean>>(
-  chordTypes.reduce((acc, chord) => {
-    acc[chord] = true;
-    return acc;
-  }, {} as Record<string, boolean>)
+  chordTypes.reduce(
+    (acc, chord) => {
+      acc[chord] = true;
+      return acc;
+    },
+    {} as Record<string, boolean>,
+  ),
 );
 
 export const attemptsState = atom<number>(0);
@@ -142,7 +148,7 @@ const questionCreators: Record<
 
 function createIntervalQuestion(
   settings: Settings,
-  index = 0
+  index = 0,
 ): IntervalQuestion {
   const direction = getDirection(settings);
   const interval = getRandomInterval(settings.intervalsSelection);
@@ -156,7 +162,7 @@ function createIntervalQuestion(
     answer: interval,
     notes,
     index,
-    direction
+    direction,
   };
 }
 
@@ -170,7 +176,7 @@ function createChordQuestion(settings: Settings, index = 0): ChordQuestion {
     answer: chord,
     notes,
     index,
-    direction
+    direction,
   };
 }
 

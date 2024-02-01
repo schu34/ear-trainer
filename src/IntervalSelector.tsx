@@ -8,9 +8,7 @@ interface ChordSelectorProps {
   onSelect: (chord: Chord) => void;
 }
 
-export const ChordSelector: React.FC<ChordSelectorProps> = ({
-  onSelect,
-}) => {
+export const ChordSelector: React.FC<ChordSelectorProps> = ({ onSelect }) => {
   const [{ chordSelection }] = useAtom(settingsSelector);
   return (
     <>

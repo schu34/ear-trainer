@@ -60,19 +60,22 @@ const intervals: Record<ChordType, IntervalShortName[]> = {
   "half-dim7": ["m3", "T", "m7"],
 };
 
-export const shortNameToChord = chordTypes.reduce((acc, ct) => {
-  const chordType = ct as ChordType;
-  acc[chordType] = {
-    type: "CHORD",
-    shortName: ct,
-    longName: ChordDisplayNames[ct],
-    intervals: intervals[ct],
-  };
-  return acc;
-}, {} as Record<ChordType, Chord>);
+export const shortNameToChord = chordTypes.reduce(
+  (acc, ct) => {
+    const chordType = ct as ChordType;
+    acc[chordType] = {
+      type: "CHORD",
+      shortName: ct,
+      longName: ChordDisplayNames[ct],
+      intervals: intervals[ct],
+    };
+    return acc;
+  },
+  {} as Record<ChordType, Chord>,
+);
 
 export const getRandomChord = (
-  typeOptions: readonly ChordType[] = chordTypes
+  typeOptions: readonly ChordType[] = chordTypes,
 ): Chord => {
   const chordType = getRandomArrayElement(typeOptions) as ChordType;
   return {
@@ -85,7 +88,7 @@ export const getRandomChord = (
 
 export const getNotesForChord = (
   chordType: ChordType,
-  direction: Direction
+  direction: Direction,
 ): Note[] => {
   const root = getChordRoot(chordType);
   const chordNotes = buildChord(root, chordType);
@@ -107,7 +110,7 @@ const getChordRoot = (chord: ChordType) => {
   const maxIntervalHalfSteps = shortNameToInterval[maxInterval].halfSteps;
   const noteIndex = getRandomIntegerInRange(
     0,
-    allNotes.length - maxIntervalHalfSteps
+    allNotes.length - maxIntervalHalfSteps,
   );
   return allNotes[noteIndex];
 };
